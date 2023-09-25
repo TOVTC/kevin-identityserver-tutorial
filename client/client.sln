@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "weatherapi", "weatherapi\weatherapi.csproj", "{AE38473C-7C0D-4EB2-B55C-1A3FED2DD4C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherMvc", "WeatherMvc\WeatherMvc.csproj", "{34C3F5E5-0756-494F-B31F-69AC2BC22264}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherMvc", "WeatherMvc\WeatherMvc.csproj", "{34C3F5E5-0756-494F-B31F-69AC2BC22264}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
