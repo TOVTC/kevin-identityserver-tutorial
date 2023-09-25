@@ -1,4 +1,4 @@
-# Identity server 4
+# Identity Server 4
 * Install IdentityServer4 templates
 ```
 dotnet new -i identityserver4.templates
@@ -33,3 +33,12 @@ dotnet sln add <path-to-solution>
 ```
 curl -XPOST "https://localhost:5443/connect/token" -H "Content-Type: application/x-www-form-urlencoded" -H "Cache-Control: no-cache" -d "client_id=m2m.client&scope=weatherapi.read&client_secret=SuperSecretPassword&grant_type=client_credentials"
 ```
+
+## Adding the API
+* The goal is to create a protected API wherein, in order to access that API, the app first has to ask IdentityServer for a bearer token, then have the API check that token
+* In a new directory, create a protected API using ASP.NET Core Web API template
+```
+dotnet new api
+```
+* Then, create a new solution and add the project file to it
+* Now, if the weatherapi project is run, navigating to its url (here, the tutorial set it to localhost:5445) will return randomly generated weather data as json
