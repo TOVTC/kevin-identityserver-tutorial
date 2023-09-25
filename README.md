@@ -41,5 +41,11 @@ curl -XPOST "https://localhost:5443/connect/token" -H "Content-Type: application
 dotnet new webapi
 ```
 * Then, create a new solution and add the project file to it
-* Now, if the weatherapi project is run, navigating to its url (here, the tutorial set it to localhost:5445) will return randomly generated weather data as json
+* Now, if the weatherapi project is run, navigating to its url (/weatherforcast) (here, the tutorial set it to localhost:5445) will return randomly generated weather data as json
 * Once the API is protected, all clients must have a bearer token in order to be authorized to access a resource, for the application to be able to execute this, add the IdentityServer AccessTokenValidation NuGet package
+* In the weatherapi's Startup.cs, configure the service to use authentication in the ConfigureServices method and add authentication to the pipeline in the Configure method
+* To protect an API route, use the [Authorize] decorator in the Controller - at this point, if you re-run the application, it will return a 401 unauthorized error if you try to access the /weatherforecast endpoint
+* To simulate an authorized API request, generate a new Bearer token using the curl command from the previous section and then add it to the following curl command, which should print randomly generated weather data to the console
+```
+curl -XGET "https://localhost:5445/weatherforecast" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Bearer <bearer-token-here>"
+```

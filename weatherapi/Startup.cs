@@ -25,6 +25,17 @@ namespace weatherapi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // call the .AddAuthentication() method to with the default scheme set to Bearer
+            services.AddAuthentication("Bearer")
+                // set the scheme to Bearer and then set options which tell the app how to call IdentityServer
+                .AddIdentityServerAuthentication("Bearer", options =>
+                {
+                    // specify the API name, which is the resources being protected
+                    options.ApiName = "weatherapi";
+                    // the address that the identity server is listening on
+                    options.Authority = "https://localhost:5443";
+                });
+
             services.AddControllers();
         }
 
@@ -39,6 +50,9 @@ namespace weatherapi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // add authentication to the pipeline - must add this before adding use authorization
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
