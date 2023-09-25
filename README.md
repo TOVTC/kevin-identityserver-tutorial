@@ -11,7 +11,7 @@ dotnet new is4inmem
 ```
 dotnet new web
 ```
-* Using the instructions from the official Identity Server documentation, create a new solution and add the project file to it so it can be opened by Visual Studio
+* Using the instructions from the official Identity Server documentation, create a new solution and add the project file (the .csproj file) to it so it can be opened by Visual Studio
 ```
 dotnet new sln -n <name-of-solution>
 dotnet sln add <path-to-solution>
@@ -49,3 +49,8 @@ dotnet new webapi
 ```
 curl -XGET "https://localhost:5445/weatherforecast" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Bearer <bearer-token-here>"
 ```
+
+## Adding MVC
+* Create a client folder and add the weatherapi directory to it, then create a new client solution within the client directory that will bundle the weatherapi and MVC solutions together and add the weatherapi project file to it
+* The add a new ASP.NET Core Web App to the client solution, using Visual Studio
+* Update the launchSettings of the MVC web app to match the ports that were configured for the interactive client in the Config of the IdentityServer (here we use port 5444)
