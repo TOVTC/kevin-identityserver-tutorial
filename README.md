@@ -51,6 +51,8 @@ curl -XGET "https://localhost:5445/weatherforecast" -H "Content-Type: applicatio
 ```
 
 ## Adding MVC
+* This app should be able to do two things: call the API application (set the bearer token) and make calls to the IdentityServer in order to be able to get that token (and to be able to login to the app)
 * Create a client folder and add the weatherapi directory to it, then create a new client solution within the client directory that will bundle the weatherapi and MVC solutions together and add the weatherapi project file to it
 * The add a new ASP.NET Core Web App to the client solution, using Visual Studio
 * Update the launchSettings of the MVC web app to match the ports that were configured for the interactive client in the Config of the IdentityServer (here we use port 5444)
+* Add the IdentityModel NuGet package to access specific helpers for the application
