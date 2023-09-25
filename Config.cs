@@ -112,6 +112,7 @@ namespace Ids
               ClientName = "Client Credentials Client",
 
               AllowedGrantTypes = GrantTypes.ClientCredentials,
+              // the .Sha256() method hashes the secret string
               ClientSecrets = {new Secret("SuperSecretPassword".Sha256())},
 
               AllowedScopes = {"weatherapi.read", "weatherapi.write"}

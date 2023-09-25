@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
+using Ids;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -23,12 +24,13 @@ namespace ids
         public void ConfigureServices(IServiceCollection services)
         {
             // add identity server and specify where it can find its resources
+            // can initialize with empty lists if no configuration available
             services.AddIdentityServer()
-                .AddInMemoryClients(new List<Client>())
-                .AddInMemoryIdentityResources(new List<IdentityResource>())
-                .AddInMemoryApiResources(new List<ApiResource>())
-                .AddInMemoryApiScopes(new List<ApiScope>())
-                .AddTestUsers(new List<TestUser>())
+                .AddInMemoryClients(Config.Clients)
+                .AddInMemoryIdentityResources(Config.IdentityResources)
+                .AddInMemoryApiResources(Config.ApiResources)
+                .AddInMemoryApiScopes(Config.ApiScopes)
+                .AddTestUsers(Config.Users)
                 // provides signing material for various resources but is for dev scenarios only (for when you don't have a certificate to use)
                 // in production, AddSigningCredential or AddValidationKey should be used instead
                 .AddDeveloperSigningCredential();
