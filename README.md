@@ -1,5 +1,5 @@
 # Identity server 4
-* Install IS4 templates
+* Install IdentityServer4 templates
 ```
 dotnet new -i identityserver4.templates
 ```
@@ -16,4 +16,10 @@ dotnet new web
 dotnet new sln -n <name-of-solution>
 dotnet sln add <path-to-solution>
 ```
-* After updating launchSettings.json to use the desired ports, add IdentityServer 4 as a package to the application using NuGet package manager or the command line
+* Add IdentityServer4 as a package to the application using NuGet package manager or the command line
+
+## Configure Identity Server
+* In Startup.cs
+    * Add IdentityServer to the ConfigureServices method and specify where it can find its resources
+    * Add IdentityServer to the pipeline in the Configure method
+* At this point, the app can be run and the discovery document should be available for viewing at /.well-known/openid-configuration

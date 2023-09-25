@@ -22,6 +22,15 @@ namespace ids
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // add identity server and specify where it can find its resources
+            services.AddIdentityServer()
+                .AddInMemoryClients(new List<Client>())
+                .AddInMemoryIdentityResources(new List<IdentityResource>())
+                .AddInMemoryApiResources(new List<ApiResource>())
+                .AddInMemoryApiScopes(new List<ApiScope>())
+                .AddTestUsers(new List<TestUser>())
+                // provides signing material for various resources
+                .AddDeveloperSigningCredential();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,6 +42,8 @@ namespace ids
             }
 
             app.UseRouting();
+            // add identity server into the pipeline - identity server itself is a piece of middleware
+            app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>
             {
