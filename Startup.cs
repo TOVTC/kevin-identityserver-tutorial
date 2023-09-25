@@ -29,7 +29,8 @@ namespace ids
                 .AddInMemoryApiResources(new List<ApiResource>())
                 .AddInMemoryApiScopes(new List<ApiScope>())
                 .AddTestUsers(new List<TestUser>())
-                // provides signing material for various resources
+                // provides signing material for various resources but is for dev scenarios only (for when you don't have a certificate to use)
+                // in production, AddSigningCredential or AddValidationKey should be used instead
                 .AddDeveloperSigningCredential();
         }
 
