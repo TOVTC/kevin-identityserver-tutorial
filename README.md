@@ -56,6 +56,7 @@ curl -XGET "https://localhost:5445/weatherforecast" -H "Content-Type: applicatio
 * The add a new ASP.NET Core Web App to the client solution (make sure it's an MVC Web App template)
 * Update the launchSettings of the MVC web app to match the ports that were configured for the interactive client in the Config of the IdentityServer (here we use port 5444)
 * Add the IdentityModel NuGet package to access specific helpers for the application
+    * Downgrade this package to version 4.5 to avoid bugs
 * In the Views directory, create a .cshtml file that will display the data (make sure to add any relevant data models into the Models directory)
 * Add a new route to access and display the weather data in the HomeController.cs file
     * Make an Http request to the API url (here, it's localhost:5445/weatherforecast), deserialize the data, and pass it to the View that was created
@@ -78,3 +79,10 @@ curl -XGET "https://localhost:5445/weatherforecast" -H "Content-Type: applicatio
 * Add a User interface onto the IdentityServer instance
 * The tutorial does not use the Quickstart template, but the template would provide the Quickstart UI - in this case, directly download the Quickstart directory, Views directory, and wwwroot directory from here: https://github.com/IdentityServer/IdentityServer4.Quickstart.UI
     * Add them to the root level directory of the IdentityServer project
+* For IdentityServer to make use of the template controllers, configure services in .ConfigureServices() and add UseAuthorization to the pipeline and update the enpoints in .Configure() of Startup.cs for the IdentityServer project
+    *  The CSS in this tutorial isn't properly served for some reason
+* Add the [Authorize] decorator to the Weather() endpoint of HomeController.cs of the MVC application
+* Configure how authorization will be granted in Startup.cs in the MVC project under .ConfigureServices() and add authentication to the pipeline in .Configure()
+* Because OIDC will be handling user authentication for us, add the Microsoft.AspNetCore.Authentication.OpenIdConnect NuGet package to the MVC project
+* Now, accessing /home/weather will automatically redirect a user to the IdentityServer login page
+    * After logging in with one of the test users, Alice or Bob, the app will redirect to the consent page, and after clicking allow, it should redirect to /home/weather

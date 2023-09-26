@@ -34,6 +34,10 @@ namespace ids
                 // provides signing material for various resources but is for dev scenarios only (for when you don't have a certificate to use)
                 // in production, AddSigningCredential or AddValidationKey should be used instead
                 .AddDeveloperSigningCredential();
+
+            // add the following to allow IdentityServer to use IdentityServer UI
+            // adds all the controllers to the services collection
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,14 +51,11 @@ namespace ids
             app.UseRouting();
             // add identity server into the pipeline - identity server itself is a piece of middleware
             app.UseIdentityServer();
+            // add use authorization to allow authorization of users
+            app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World");
-                });
-            });
+            // update the endpoint to server the IdentityServer UI
+            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
 
         }
     }
