@@ -61,11 +61,20 @@ curl -XGET "https://localhost:5445/weatherforecast" -H "Content-Type: applicatio
     * Make an Http request to the API url (here, it's localhost:5445/weatherforecast), deserialize the data, and pass it to the View that was created
 * Here, you can comment out the [Authorize] decorator briefly to test the MVC app
 
-## Adding A Token to the API Request
-* Before the .GetAsync() method is called, a bearer token must be added to the request
+## Adding A Client Token to the API Request
+* Before the .GetAsync() method is called, a bearer token must be added to the request to authorize clients making requests to the application (our machine to machine client)
 * To do this, introduce a token service -  a service that can be plugged in wherever it is needed so that access to a token is granted
     * Add a new Services directory in the MVC project
 * The data supplied to the IdentityServerSettings Model can be set in appsettings.json
 * The ITokenService interface is implemented in the controller to allow access to the .GetToken() method, which will return a bearer token that can be attached to requests to the protected API endpoint
+    * Inject the TokenService in the controller to access the GetToken method
+    * The token is then added to the http request as a bearer token
 * The TokenService provides the logic for the .GetToken() method, and retrieves information from both the appSettings and the DiscoveryDocument
+    * The TokenService gets the DiscoveryDocument and retrieves the token endpoint to get the token, specifying the client id, client secret, and scope
 * Make sure to register the services in the MVC project's Startup.cs file in the .ConfigureServices() method
+
+## Adding User Authorization
+* The client is now protected, but the endpoint can still be accessed by any user
+* Add a User interface onto the IdentityServer instance
+* The tutorial does not use the Quickstart template, but the template would provide the Quickstart UI - in this case, directly download the Quickstart directory, Views directory, and wwwroot directory from here: https://github.com/IdentityServer/IdentityServer4.Quickstart.UI
+    * Add them to the root level directory of the IdentityServer project
