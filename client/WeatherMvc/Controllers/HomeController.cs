@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Reflection;
 using WeatherMvc.Services;
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WeatherMvc.Controllers;
 
@@ -34,6 +35,7 @@ public class HomeController : Controller
         return View();
     }
 
+    [Authorize]
     // add a new endpoint called Weather
     public async Task<IActionResult> Weather()
     {

@@ -27,6 +27,36 @@ namespace WeatherMvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            // register configuration for user authentication
+            services.AddAuthentication(options =>
+            {
+                // the name of the cookie that will be used to maintain the user's authentication
+                options.DefaultScheme = "cookie";
+                // use oidc as the challenge mechanism for the user
+                // basically indicates that we will call IdentityServer and have it handle authentication for us
+                options.DefaultChallengeScheme = "oidc";
+            })
+                .AddCookie("cookie")
+                // configure oidc using NuGet package
+                .AddOpenIdConnect("oidc", options =>
+                {
+                    // configure the openid server we are going to use (taken from the interactiveServiceSettings section in appSettings.json)
+                    options.Authority = Configuration["InteractiveServiceSettings:AuthorityUrl"];
+                    options.ClientId = Configuration["InteractiveServiceSettings:ClientId"];
+                    options.ClientSecret = Configuration["InteractiveServiceSettings:ClientSecret"];
+
+                    // specifies that we are using the authorization code flow
+                    options.ResponseType = "code";
+                    options.UsePkce = true;
+                    options.ResponseMode = "query";
+
+                    // specify the scopes being asked for
+                    options.Scope.Add(Configuration["InteractiveServiceSettings:Scopes:0"]);
+                    // causes the identity and access tokens to be saved, making them available to other parts of the code
+                    options.SaveTokens = true;
+                });
+
             // register configuration for token service
             services.Configure<IdentityServerSettings>(Configuration.GetSection("IdentityServerSettings"));
             services.AddSingleton<ITokenService, TokenService>();
@@ -45,6 +75,8 @@ namespace WeatherMvc
 
             app.UseRouting();
 
+            // add authentication to the pipeline
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
