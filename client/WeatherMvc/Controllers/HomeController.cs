@@ -1,8 +1,12 @@
 ﻿using System.Diagnostics;
+using System.Net.Http.Json;
+using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using WeatherMvc.Models;
+using Newtonsoft.Json;
+using System.Reflection;
 
 namespace WeatherMvc.Controllers;
 
@@ -33,21 +37,10 @@ public class HomeController : Controller
         // use an http client to call the api
         using (var client = new HttpClient())
         {
-            var result = client
-                .GetAsync("https://localhost:5445/weatherforecast")
-                .Result;
-            if (result.IsSuccessStatusCode)
-            {
-                var model = result.Content.ReadAsStringAsync().Result;
+            var result = await client.GetStringAsync("https://localhost:5445/weatherforecast");
+            data = JsonConvert.DeserializeObject<List<WeatherData>>(result);
 
-                data = JsonSerializer.Deserialize<List<WeatherData>>(model);
-
-                return View(data);
-            }
-            else
-            {
-                throw new Exception("Unable to get content");
-            }
+            return View(data);
         }
     }
 
