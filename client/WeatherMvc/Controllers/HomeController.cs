@@ -7,15 +7,20 @@ using Microsoft.AspNetCore.Mvc;
 using WeatherMvc.Models;
 using Newtonsoft.Json;
 using System.Reflection;
+using WeatherMvc.Services;
+using IdentityModel.Client;
 
 namespace WeatherMvc.Controllers;
 
 public class HomeController : Controller
 {
+    private readonly ITokenService _tokenService;
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    // to use the token returned from the client token service, inject the token service as a dependency
+    public HomeController(ITokenService tokenService, ILogger<HomeController> logger)
     {
+        _tokenService = tokenService;
         _logger = logger;
     }
 
@@ -37,10 +42,29 @@ public class HomeController : Controller
         // use an http client to call the api
         using (var client = new HttpClient())
         {
-            var result = await client.GetStringAsync("https://localhost:5445/weatherforecast");
-            data = JsonConvert.DeserializeObject<List<WeatherData>>(result);
+            // retrieve the token, providing the scope
+            var tokenResponse = await _tokenService.GetToken("weatherapi.read");
 
-            return View(data);
+            // attach the new token to the client requests
+            client
+              .SetBearerToken(tokenResponse.AccessToken);
+
+            var result = client
+              .GetAsync("https://localhost:5445/weatherforecast")
+              .Result;
+
+            if (result.IsSuccessStatusCode)
+            {
+                var model = result.Content.ReadAsStringAsync().Result;
+
+                data = JsonConvert.DeserializeObject<List<WeatherData>>(model);
+
+                return View(data);
+            }
+            else
+            {
+                throw new Exception("Unable to get content");
+            }
         }
     }
 

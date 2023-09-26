@@ -6,7 +6,7 @@ namespace weatherapi.Controllers;
 [ApiController]
 [Route("[controller]")]
 // use this decorator to require authentication
-//[Authorize]
+[Authorize]
 public class WeatherForecastController : ControllerBase
 {
     private static readonly string[] Summaries = new[]

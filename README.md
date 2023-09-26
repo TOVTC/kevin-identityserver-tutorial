@@ -59,4 +59,13 @@ curl -XGET "https://localhost:5445/weatherforecast" -H "Content-Type: applicatio
 * In the Views directory, create a .cshtml file that will display the data (make sure to add any relevant data models into the Models directory)
 * Add a new route to access and display the weather data in the HomeController.cs file
     * Make an Http request to the API url (here, it's localhost:5445/weatherforecast), deserialize the data, and pass it to the View that was created
-    * Here, you can comment out the [Authorize] decorator briefly to test the MVC app
+* Here, you can comment out the [Authorize] decorator briefly to test the MVC app
+
+## Adding A Token to the API Request
+* Before the .GetAsync() method is called, a bearer token must be added to the request
+* To do this, introduce a token service -  a service that can be plugged in wherever it is needed so that access to a token is granted
+    * Add a new Services directory in the MVC project
+* The data supplied to the IdentityServerSettings Model can be set in appsettings.json
+* The ITokenService interface is implemented in the controller to allow access to the .GetToken() method, which will return a bearer token that can be attached to requests to the protected API endpoint
+* The TokenService provides the logic for the .GetToken() method, and retrieves information from both the appSettings and the DiscoveryDocument
+* Make sure to register the services in the MVC project's Startup.cs file in the .ConfigureServices() method

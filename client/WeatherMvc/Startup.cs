@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using WeatherMvc.Services;
 
 namespace WeatherMvc
 {
@@ -26,6 +27,9 @@ namespace WeatherMvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            // register configuration for token service
+            services.Configure<IdentityServerSettings>(Configuration.GetSection("IdentityServerSettings"));
+            services.AddSingleton<ITokenService, TokenService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
